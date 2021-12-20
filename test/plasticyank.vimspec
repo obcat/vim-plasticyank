@@ -1,0 +1,106 @@
+Describe <Plug>(plasticyank-y)
+  Before all
+    set cpoptions+=y
+  End
+
+
+  After all
+    set cpoptions&
+  End
+
+
+  After each
+    % bwipeout!
+    set virtualedit&
+  End
+
+
+  Describe <Plug>(plasticyank-y){characterwise-motion}
+    " TODO
+  End
+
+
+  Describe <Plug>(plasticyank-y){linewise-motion}
+    " TODO
+  End
+
+
+  Describe <Plug>(plasticyank-y){blockwise-motion}
+    " TODO
+  End
+
+
+  Describe {characterwise-Visual}<Plug>(plasticyank-y)
+    " TODO
+  End
+
+
+  Describe {linewise-Visual}<Plug>(plasticyank-y)
+    " TODO
+  End
+
+
+  Describe {blockwise-Visual}<Plug>(plasticyank-y)
+    Context test 1
+      It works same as built-in one
+        set virtualedit=
+        put = 'sa😿d;(泣'
+        put = '😿sad'
+        1 delete _
+        1
+        normal! 1|
+        execute 'normal' "\<C-v>j2|\<Plug>(plasticyank-y)"
+        Assert Equals(GetRegContents('"'), ['sa', '😿'])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        normal! 3|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['😿', 'sa'])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        normal! 5|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['d;', 'd'])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        set virtualedit=block
+        normal! 5|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['d;', 'd '])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        set virtualedit=
+        normal! 8|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['泣', '  '])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+      End
+
+      It is really same?
+        set virtualedit=
+        put = 'sa😿d;(泣'
+        put = '😿sad'
+        1 delete _
+        1
+        normal! 1|
+        execute 'normal!' "\<C-v>j2|y"
+        Assert Equals(GetRegContents('"'), ['sa', '😿'])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        normal! 3|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['😿', 'sa'])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        normal! 5|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['d;', 'd'])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        set virtualedit=block
+        normal! 5|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['d;', 'd '])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+        set virtualedit=
+        normal! 8|
+        normal! .
+        Assert Equals(GetRegContents('"'), ['泣', '  '])
+        Assert Equals(getregtype('"'), "\<C-v>2")
+      End
+    End
+  End
+End

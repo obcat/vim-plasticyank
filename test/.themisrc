@@ -1,0 +1,11 @@
+call themis#log('-----------------------------------------------------------')
+call themis#log(join(split(execute('version'), '\n')[: 2], "\n"))
+call themis#log('-----------------------------------------------------------')
+
+let s:assert = themis#helper('assert')
+call themis#option('reporter', 'dot')
+call themis#helper('command').with(s:assert)
+
+function GetRegContents(regname) abort
+  return getreg(a:regname, 1, 1)
+endfunction
