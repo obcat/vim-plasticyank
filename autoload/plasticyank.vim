@@ -77,11 +77,7 @@ function s:plasticyank_operatorfunc_blockwise_visual_dot_repeat(block_height, bl
   set eventignore+=ModeChanged
 
   if match(split(&virtualedit, ','), '\C^\%(block\|all\)$') >= 0
-    " blockwise motion (o_v) also updates visual marks and visualmode().
-    let virtualedit = &virtualedit
-    set virtualedit=all
-    execute printf("normal! \"%sy\<C-v>g`]", regname)
-    let &virtualedit = virtualedit
+    execute printf("normal! \<C-v>g`]\"%sy", regname)
   else
 
     let leftside_vcol = s:cursorcharhead_virtcol()
